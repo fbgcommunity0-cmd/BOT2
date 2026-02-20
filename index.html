@@ -480,37 +480,15 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4 pt-4">
-                        <div class="bg-white p-3 rounded-lg text-center border hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md">
-                            <img src="https://i.postimg.cc/Jh9s6jWw/20250922-113350.png" alt="Nagad" class="w-10 h-10 rounded-full mx-auto mb-2">
-                            <p class="font-bold text-md">নগদ</p>
-                            <p class="text-gray-600 font-mono tracking-wider text-sm my-1">01624506154</p>
-                            <button onclick="copyToClipboard('01624506154', this)" class="w-full text-xs p-1 mt-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors flex items-center justify-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span></button>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg text-center border hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md">
-                            <img src="https://i.postimg.cc/tCwGVkdH/20250922-113514.png" alt="bKash" class="w-10 h-10 rounded-full mx-auto mb-2">
-                            <p class="font-bold text-md">বিকাশ</p>
-                            <p class="text-gray-600 font-mono tracking-wider text-sm my-1">01624506154</p>
-                            <button onclick="copyToClipboard('01624506154', this)" class="w-full text-xs p-1 mt-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors flex items-center justify-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span></button>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg text-center border hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md">
-                            <img src="https://i.postimg.cc/Jh9s6jWw/20250922-113350.png" alt="Rocket" class="w-10 h-10 rounded-full mx-auto mb-2">
-                            <p class="font-bold text-md">NAGOD</p>
-                            <p class="text-gray-600 font-mono tracking-wider text-sm my-1">01624506154</p>
-                            <button onclick="copyToClipboard('01624506154', this)" class="w-full text-xs p-1 mt-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors flex items-center justify-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span></button>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg text-center border hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md">
-                            <img src="https://i.postimg.cc/L6LFLfxY/20250922-113752.png" alt="Binance Pay" class="w-10 h-10 rounded-full mx-auto mb-2">
-                            <p class="font-bold text-md">Binance Pay</p>
-                            <p class="text-gray-600 font-mono tracking-wider text-sm my-1">1156705717</p>
-                            <button onclick="copyToClipboard('1156705717', this)" class="w-full text-xs p-1 mt-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors flex items-center justify-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i><span>Copy ID</span></button>
-                        </div>
+                    
+                    <!-- Payment methods will be loaded dynamically here -->
+                    <div id="payment-methods-grid" class="grid grid-cols-2 gap-4 pt-4">
+                        <!-- Example: <div class="bg-white p-3 rounded-lg text-center border">...</div> -->
                     </div>
 
                     <p class="text-sm text-gray-600 mb-4 text-center border-t border-gray-300 pt-4">টাকা পাঠানোর পর নিচের ফর্মটি পূরণ করুন:</p>
                     <div class="space-y-4">
-                         <div><label for="deposit-method" class="block text-sm font-medium text-gray-600 mb-2">পেমেন্ট মাধ্যম</label><select id="deposit-method" class="w-full p-3 rounded-lg input-field"><option value="">কোন মাধ্যমে টাকা পাঠিয়েছেন?</option><option value="Nagad">নগদ</option><option value="bKash">বিকাশ</option><option value="Rocket">রকেট</option><option value="Binance">Binance</option></select></div>
+                         <div><label for="deposit-method" class="block text-sm font-medium text-gray-600 mb-2">পেমেন্ট মাধ্যম</label><select id="deposit-method" class="w-full p-3 rounded-lg input-field"><option value="">কোন মাধ্যমে টাকা পাঠিয়েছেন?</option></select></div>
                         <div><label for="deposit-amount" class="block text-sm font-medium text-gray-600 mb-2">টাকার পরিমাণ (BDT)</label><input id="deposit-amount" type="number" placeholder="e.g., 100" class="w-full p-3 rounded-lg input-field"></div>
                         <div><label for="sender-number" class="block text-sm font-medium text-gray-600 mb-2">আপনার পেমেন্ট নম্বর</label><input id="sender-number" type="text" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন" class="w-full p-3 rounded-lg input-field"></div>
                         <div><label for="deposit-txid" class="block text-sm font-medium text-gray-600 mb-2">Transaction ID (TrxID)</label><input id="deposit-txid" type="text" placeholder="টাকা পাঠানোর পর পাওয়া TrxID" class="w-full p-3 rounded-lg input-field"></div>
@@ -522,25 +500,27 @@
 
             <div id="mail-page" class="sub-page">
                 <div class="p-4 space-y-6">
-                    <div class="mail-view-switcher">
-                        <button id="login-mail-btn" class="active">OTP MAIL</button>
-                        <button id="otp-mail-btn">LOGIN MAIL</button>
-                    </div>
-
-                    <div id="mail-views-container">
-                        <div id="login-mail-container" class="mail-view space-y-4"></div>
-                        <div id="otp-mail-container" class="mail-view space-y-4"></div>
-                    </div>
-                    
-                    <div class="mt-8">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-lg font-semibold">Buy History</h3>
-                            <div id="history-action-buttons" class="flex items-center gap-2">
-                               <button id="copy-all-history-btn" class="btn-outline-accent p-2 rounded-lg text-sm flex items-center gap-1"><i data-lucide="copy-check" class="w-4 h-4"></i><span>Copy All</span></button>
-                               <button id="download-history-btn" class="btn-outline-accent p-2 rounded-lg text-sm flex items-center gap-1"><i data-lucide="download" class="w-4 h-4"></i><span>Download</span></button>
-                            </div>
+                    <div id="mail-service-container">
+                        <div class="mail-view-switcher">
+                            <button id="login-mail-btn" class="active">OTP MAIL</button>
+                            <button id="otp-mail-btn">LOGIN MAIL</button>
                         </div>
-                        <div id="mail-purchase-history" class="space-y-3"></div>
+
+                        <div id="mail-views-container">
+                            <div id="login-mail-container" class="mail-view space-y-4"></div>
+                            <div id="otp-mail-container" class="mail-view space-y-4"></div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-lg font-semibold">Buy History</h3>
+                                <div id="history-action-buttons" class="flex items-center gap-2">
+                                   <button id="copy-all-history-btn" class="btn-outline-accent p-2 rounded-lg text-sm flex items-center gap-1"><i data-lucide="copy-check" class="w-4 h-4"></i><span>Copy All</span></button>
+                                   <button id="download-history-btn" class="btn-outline-accent p-2 rounded-lg text-sm flex items-center gap-1"><i data-lucide="download" class="w-4 h-4"></i><span>Download</span></button>
+                                </div>
+                            </div>
+                            <div id="mail-purchase-history" class="space-y-3"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -605,6 +585,14 @@
                         </span>
                         <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400"></i>
                     </button>
+                    <!-- NEW ADMIN BUTTON -->
+                    <button id="admin-btn" class="w-full card-bg p-4 rounded-xl flex justify-between items-center text-left text-lg font-semibold">
+                        <span class="flex items-center gap-3">
+                           <i data-lucide="shield" class="w-6 h-6 text-gray-600"></i>
+                           <span>Admin</span>
+                        </span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400"></i>
+                    </button>
                 </div>
 
                 <div class="text-center pt-6">
@@ -624,6 +612,19 @@
                     <i data-lucide="construct" class="w-16 h-16 text-gray-400 mb-4"></i>
                     <h3 class="text-2xl font-bold text-gray-700">Coming Soon!</h3>
                     <p class="text-gray-500 mt-2">This feature is currently under construction.<br>We are working hard to bring it to you.</p>
+                </div>
+            </div>
+
+            <!-- NEW ADMIN PAGE -->
+            <div id="admin-page" class="p-4 space-y-6 sub-page">
+                <div class="relative flex items-center justify-center mb-4">
+                    <button onclick="navigateTo('profile-page')" class="absolute left-0 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i data-lucide="arrow-left" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-center text-gray-800">Admin Panel</h2>
+                </div>
+                <div id="admin-stats-container" class="space-y-4">
+                    <!-- Admin stats will be loaded here -->
                 </div>
             </div>
 
@@ -868,7 +869,7 @@
         
         // --- DUAL FIREBASE CONFIG ---
 
-        // Config 1: For User Balance, Deposits, Profiles, Support, Notifications, Reviews
+        // Config 1: For User Balance, Deposits, Profiles, Support, Notifications, Reviews, and App Settings
         const firebaseConfig = {
           apiKey: "AIzaSyAsENiikJ5YQ1F8UHrixdJVEINAhO4PG30",
           authDomain: "bot2-3d8bc.firebaseapp.com",
@@ -878,7 +879,7 @@
           messagingSenderId: "77444577377",
           appId: "1:77444577377:web:05a9910049d166878d5220"
         };
-        // Config 2: For Mail Stock, Purchase History, App Config etc.
+        // Config 2: For Mail Stock, Purchase History etc. (Conditionally Loaded)
         const firebaseConfigMail = {
           apiKey: "AIzaSyBtNIF0NbUsriMB7ZNrwfl_0hEyP6BpH6s",
           authDomain: "tmgbdsell.firebaseapp.com",
@@ -892,17 +893,18 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit, runTransaction, getCountFromServer, writeBatch, updateDoc, Timestamp, onSnapshot, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-        // --- Initialize both Firebase apps ---
+        // --- Initialize Firebase App 1 (User App) by default ---
         const userApp = initializeApp(firebaseConfig, "userApp");
-        const mailApp = initializeApp(firebaseConfigMail, "mailApp");
+        const dbUser = getFirestore(userApp); // Database for user data, settings, etc.
 
-        // --- Get Firestore instances for each app ---
-        const dbUser = getFirestore(userApp); // Database for user data, notifications, support, reviews
-        const dbMail = getFirestore(mailApp); // Database for mails, history, configs, etc.
+        // --- Firebase App 2 (Mail App) will be initialized conditionally ---
+        let mailApp = null;
+        let dbMail = null;
 
         let currentUserTg = null;
         let userData = null;
         let appConfig = {};
+        let mailTypesConfig = []; // To store mail types from dbMail if linked
         let insufficientBalanceInterval = null;
         let countdownInterval = null;
         
@@ -951,10 +953,26 @@
             //     return;
             // }
             
+            loaderStatusText.textContent = 'Loading configuration...';
+            // Fetch central config first
+            await fetchAppConfig();
+            
+            // Conditionally initialize the second Firebase app
+            if (appConfig.isMailDbLinked) {
+                try {
+                    mailApp = initializeApp(firebaseConfigMail, "mailApp");
+                    dbMail = getFirestore(mailApp);
+                    await fetchMailTypesConfig(); // Fetch mail types from dbMail
+                } catch(e) {
+                    console.error("Failed to initialize Mail Database:", e);
+                    appConfig.isMailDbLinked = false; // Fallback if initialization fails
+                }
+            }
+            
             loaderStatusText.textContent = 'Loading your profile...';
             setupEventListeners();
             setupBanner();
-
+            
             await initUserSession();
 
             loader.style.opacity = '0';
@@ -1047,8 +1065,6 @@
                 showAlert(`আপনার অ্যাকাউন্ট ব্লক করা হয়েছে।${remainingTime ? ` এটি ${remainingTime} ঘন্টা পর খুলবে।` : ''}`);
                 return;
             }
-            
-            await fetchAppConfig();
 
             loadSupportMenu();
             updateUI();
@@ -1058,13 +1074,17 @@
         }
 
         async function fetchAppConfig() {
-            const configRef = doc(dbMail, "config", "main");
+            const configRef = doc(dbUser, "config", "appSettings"); // Fetched from dbUser
             const configSnap = await getDoc(configRef);
             if (configSnap.exists()) {
                 appConfig = configSnap.data();
             } else {
+                // Default fallback config
                 appConfig = { 
-                    mails: [],
+                    paymentMethods: [],
+                    tutorials: [],
+                    isMailDbLinked: false,
+                    adminPassword: "1224", // Default password
                     minDeposit: 50
                 };
             }
@@ -1072,6 +1092,18 @@
             if(depositAmountInput) depositAmountInput.placeholder = `Minimum ৳${appConfig.minDeposit || 50}`;
         }
         
+        async function fetchMailTypesConfig() {
+            // This function fetches mail configuration from dbMail (Config 2)
+            if (!dbMail) return;
+            const configRef = doc(dbMail, "config", "main");
+            const configSnap = await getDoc(configRef);
+            if (configSnap.exists()) {
+                mailTypesConfig = configSnap.data().mails || [];
+            } else {
+                mailTypesConfig = [];
+            }
+        }
+
         function updateHeaderUI() {
             if (!currentUserTg) return;
             const profilePic = document.getElementById('header-profile-pic');
@@ -1122,7 +1154,7 @@
 
             const pageLoadFunctions = {
                 'home-page': () => {},
-                'pay-page': loadPaymentHistory,
+                'pay-page': () => { loadPaymentMethods(); loadPaymentHistory(); },
                 'mail-page': loadMailStore,
                 'updates-page': () => { loadUpdates(); loadReviews(); },
                 'notification-page': loadNotificationsPage,
@@ -1131,7 +1163,8 @@
                 'features-page': loadFeaturesPage,
                 'tutorial-page': loadTutorials,
                 'link-team-page': loadLinkedFriends,
-                'send-page': () => { setupDynamicAmountHandlers('send'); }
+                'send-page': () => { setupDynamicAmountHandlers('send'); },
+                'admin-page': loadAdminPage
             };
             if (pageLoadFunctions[pageId]) pageLoadFunctions[pageId]();
             lucide.createIcons();
@@ -1143,6 +1176,15 @@
             const overlay = document.getElementById('menu-overlay');
             menu.classList.toggle('open');
             overlay.classList.toggle('open');
+        }
+        
+        function handleAdminClick() {
+            const password = prompt("Enter Admin Password:");
+            if (password === (appConfig.adminPassword || "1224")) {
+                navigateTo('admin-page');
+            } else if (password !== null) { // User didn't click cancel
+                showAlert("Incorrect password.");
+            }
         }
 
         function setupEventListeners() {
@@ -1160,6 +1202,7 @@
             
             document.getElementById('more-features-btn').addEventListener('click', handleFeaturesClick);
             document.getElementById('report-history-btn').addEventListener('click', () => navigateTo('report-history-page'));
+            document.getElementById('admin-btn').addEventListener('click', handleAdminClick);
             
             document.getElementById('features-receive-btn').addEventListener('click', handleReceive);
             document.getElementById('features-send-btn').addEventListener('click', () => navigateTo('send-page'));
@@ -1221,7 +1264,6 @@
         }
 
         function listenForNotifications() {
-            // UPDATED: Notifications are fetched from dbUser
             const q = query(collection(dbUser, "notifications"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const filteredDocs = snapshot.docs.filter(doc => {
@@ -1253,7 +1295,6 @@
             const listEl = document.getElementById('notification-list');
             listEl.innerHTML = getLoadingHTML();
             
-            // UPDATED: Notifications are fetched from dbUser
             const q = query(collection(dbUser, "notifications"), orderBy("createdAt", "desc"), limit(20));
             const snapshot = await getDocs(q);
 
@@ -1277,7 +1318,6 @@
             }
             lucide.createIcons();
 
-            // Mark notifications as read
             const userRef = doc(dbUser, "users", userData.tgChatId);
             const newTimestamp = Timestamp.now();
             await updateDoc(userRef, { lastSeenNotification: newTimestamp });
@@ -1303,6 +1343,40 @@
                 document.getElementById('profile-id').textContent = `Telegram ID: ${currentUserTg.id}`;
             }
         }
+        
+        async function loadPaymentMethods() {
+            const gridEl = document.getElementById('payment-methods-grid');
+            const selectEl = document.getElementById('deposit-method');
+            gridEl.innerHTML = '';
+            selectEl.innerHTML = '<option value="">কোন মাধ্যমে টাকা পাঠিয়েছেন?</option>';
+
+            const methods = appConfig.paymentMethods || [];
+            if(methods.length === 0) {
+                gridEl.innerHTML = '<p class="text-center text-gray-500 col-span-2">Payment methods are currently unavailable.</p>';
+                return;
+            }
+
+            methods.forEach(method => {
+                // Populate grid
+                const cardHTML = `
+                    <div class="bg-white p-3 rounded-lg text-center border hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md">
+                        <img src="${method.iconUrl}" alt="${method.name}" class="w-10 h-10 rounded-full mx-auto mb-2">
+                        <p class="font-bold text-md">${method.name}</p>
+                        <p class="text-gray-600 font-mono tracking-wider text-sm my-1">${method.number}</p>
+                        <button onclick="copyToClipboard('${method.number}', this)" class="w-full text-xs p-1 mt-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors flex items-center justify-center gap-1">
+                            <i data-lucide="copy" class="w-3 h-3"></i><span>Copy</span>
+                        </button>
+                    </div>`;
+                gridEl.innerHTML += cardHTML;
+
+                // Populate select dropdown
+                const option = document.createElement('option');
+                option.value = method.name;
+                option.textContent = method.name;
+                selectEl.appendChild(option);
+            });
+            lucide.createIcons();
+        }
 
         async function handleDepositRequest() {
             const method = document.getElementById('deposit-method').value;
@@ -1313,7 +1387,6 @@
 
             if (!method || !amount || !senderNumber || !transactionId) return showAlert("অনুগ্রহ করে সমস্ত তথ্য সঠিকভাবে পূরণ করুন।");
             if (amount < minDeposit) return showAlert(`ন্যূনতম ডিপোজিটের পরিমাণ ৳${minDeposit}।`);
-
 
             document.getElementById('app-container').append(loader);
             loader.style.opacity = '1';
@@ -1468,7 +1541,7 @@ Please review and process this request.
         function getIndividualMailActionsHTML(mail, mailType, stockKey) {
             const mailJson = encodeURIComponent(JSON.stringify(mail));
             const fullData = [mail.email, mail.password, mail.refresh_token, mail.client_id].filter(Boolean).join('|');
-            const mailConfig = appConfig.mails.find(m => m.stockKey === stockKey) || {};
+            const mailConfig = mailTypesConfig.find(m => m.stockKey === stockKey) || {};
 
             const copyBtn = `<button onclick="copyToClipboard('${fullData}', this)" title="Full Copy" class="p-2 rounded-md hover:bg-gray-200"><i data-lucide="copy-plus" class="w-4 h-4 text-gray-600"></i></button>`;
             
@@ -1483,6 +1556,14 @@ Please review and process this request.
         }
 
         async function loadMailStore() {
+            const mailServiceContainer = document.getElementById('mail-service-container');
+
+            if (!appConfig.isMailDbLinked) {
+                mailServiceContainer.innerHTML = getEmptyStateHTML('server-off', 'Service Unavailable', 'The mail service is currently offline. Please check back later.');
+                lucide.createIcons();
+                return;
+            }
+
             const loginMailContainer = document.getElementById('login-mail-container');
             const otpMailContainer = document.getElementById('otp-mail-container');
             const historyListEl = document.getElementById('mail-purchase-history');
@@ -1502,9 +1583,8 @@ Please review and process this request.
                     if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
                 }
                 
-                const allMails = appConfig.mails || [];
-                const loginMails = allMails.filter(m => m.category === 'login' || !m.category);
-                const otpMails = allMails.filter(m => m.category === 'otp');
+                const loginMails = mailTypesConfig.filter(m => m.category === 'login' || !m.category);
+                const otpMails = mailTypesConfig.filter(m => m.category === 'otp');
 
                 await Promise.all([
                     renderMailList(loginMails, loginMailContainer, effectiveBalance),
@@ -1638,6 +1718,7 @@ Please review and process this request.
         }
 
         async function handleDownloadHistory() {
+            if (!appConfig.isMailDbLinked) return showAlert("Mail service is unavailable.");
             document.getElementById('app-container').append(loader);
             loader.style.display = 'flex';
             try {
@@ -1669,6 +1750,7 @@ Please review and process this request.
         }
 
         async function handleCopyAllHistory() {
+            if (!appConfig.isMailDbLinked) return showAlert("Mail service is unavailable.");
             document.getElementById('app-container').append(loader);
             loader.style.display = 'flex';
             try {
@@ -1742,7 +1824,8 @@ Please review and process this request.
             const updatesContainer = document.getElementById('updates-content');
             updatesContainer.innerHTML = getLoadingHTML();
             try {
-                const q = query(collection(dbMail, "updates"), orderBy("createdAt", "desc"), limit(1));
+                // Updates are fetched from dbUser
+                const q = query(collection(dbUser, "updates"), orderBy("createdAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) {
                     updatesContainer.innerHTML = getEmptyStateHTML('megaphone-off', 'No Updates', 'There are no new updates right now. Check back later!');
@@ -1981,27 +2064,24 @@ Please review and process this request.
         async function loadTutorials() {
             const tutorialListEl = document.getElementById('tutorial-list');
             tutorialListEl.innerHTML = getLoadingHTML();
-            try {
-                const snapshot = await getDocs(query(collection(dbMail, "tutorials"), orderBy("order")));
-                if (snapshot.empty) {
-                     tutorialListEl.innerHTML = getEmptyStateHTML('video-off', 'No Tutorials', 'Tutorials are not available at the moment.');
-                     lucide.createIcons();
-                     return;
-                }
-                tutorialListEl.innerHTML = snapshot.docs.map(doc => {
-                    const t = doc.data();
-                    const banner = t.bannerImageUrl || 'https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png';
-                    return `<div class="card-bg rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-300"><h3 class="font-bold text-lg text-gray-800 p-4 pb-2">${t.title}</h3><a href="${t.youtubeWatchUrl}" target="_blank" class="block group p-4 pt-2"><div class="relative rounded-lg overflow-hidden"><img src="${banner}" alt="${t.title}" class="w-full aspect-video object-cover"><div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100"><i data-lucide="play-circle" class="w-16 h-16 text-white opacity-80"></i></div></div></a></div>`;
-                }).join('');
-                lucide.createIcons();
-            } catch (e) { tutorialListEl.innerHTML = '<p class="text-center text-red-600">Tutorials could not be loaded.</p>'; }
+            const tutorials = appConfig.tutorials || [];
+
+            if (tutorials.length === 0) {
+                 tutorialListEl.innerHTML = getEmptyStateHTML('video-off', 'No Tutorials', 'Tutorials are not available at the moment.');
+                 lucide.createIcons();
+                 return;
+            }
+            tutorialListEl.innerHTML = tutorials.map(t => {
+                const banner = t.bannerImageUrl || 'https://i.postimg.cc/zBp8rCX9/Yellow-Orange-Modern-Marketing-Courses-You-Tube-Thumbnail-20250910-185659-0000.png';
+                return `<div class="card-bg rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02] duration-300"><h3 class="font-bold text-lg text-gray-800 p-4 pb-2">${t.title}</h3><a href="${t.youtubeWatchUrl}" target="_blank" class="block group p-4 pt-2"><div class="relative rounded-lg overflow-hidden"><img src="${banner}" alt="${t.title}" class="w-full aspect-video object-cover"><div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100"><i data-lucide="play-circle" class="w-16 h-16 text-white opacity-80"></i></div></div></a></div>`;
+            }).join('');
+            lucide.createIcons();
         }
 
         async function loadReviews() {
             const reviewListEl = document.getElementById('reviews-list');
             reviewListEl.innerHTML = getLoadingHTML();
             try {
-                // UPDATED: Reviews are fetched from dbUser
                 const snapshot = await getDocs(query(collection(dbUser, "reviews"), orderBy("createdAt", "desc"), limit(5)));
                 if (snapshot.empty) {
                      reviewListEl.innerHTML = getEmptyStateHTML('message-square-dashed', 'No Reviews Yet', 'Be the first one to leave a review!');
@@ -2023,7 +2103,6 @@ Please review and process this request.
             const supportContainer = document.getElementById('support-channels-list');
             supportContainer.innerHTML = getLoadingHTML();
             try {
-                // UPDATED: Support channels are fetched from dbUser
                 const snapshot = await getDocs(query(collection(dbUser, "support_channels"), orderBy("order", "asc")));
                 if (snapshot.empty) return supportContainer.innerHTML = '<p class="p-4 text-center text-gray-600">No support channels available.</p>';
                 supportContainer.innerHTML = snapshot.docs.map(doc => {
@@ -2044,7 +2123,6 @@ Please review and process this request.
             document.getElementById('report-issue-modal').classList.remove('hidden');
         }
 
-        // NEW: Function to show report form for bulk purchases
         window.showBulkReportForm = (purchaseId, mailType, cost, saleId) => {
             document.getElementById('report-modal-mail-type').textContent = `${mailType} (Bulk Purchase ID: ${saleId})`;
             document.getElementById('report-purchase-id').value = purchaseId;
@@ -2056,6 +2134,7 @@ Please review and process this request.
 
         async function handleReportSubmit(event) {
             event.preventDefault();
+            if (!appConfig.isMailDbLinked) return showAlert("Mail service is unavailable.");
             const purchaseId = document.getElementById('report-purchase-id').value;
             const cost = parseFloat(document.getElementById('report-purchase-cost').value);
             const saleId = document.getElementById('report-purchase-saleId').value;
@@ -2216,8 +2295,31 @@ Please review and process this request.
             }
         };
         
-        async function loadReportHistory() {
-            // "Coming Soon" page doesn't need to load data.
+        async function loadAdminPage() {
+            const container = document.getElementById('admin-stats-container');
+            container.innerHTML = getLoadingHTML();
+
+            if (!appConfig.isMailDbLinked) {
+                container.innerHTML = getEmptyStateHTML('server-off', 'Service Unlinked', 'The mail database is not linked. Cannot fetch stats.');
+                lucide.createIcons();
+                return;
+            }
+
+            try {
+                const purchasesRef = collection(dbMail, 'mail_purchases');
+                const snapshot = await getCountFromServer(purchasesRef);
+                const totalPurchases = snapshot.data().count;
+
+                container.innerHTML = `
+                    <div class="card-bg p-4 rounded-xl text-center">
+                        <p class="text-sm text-gray-400 mb-1">TOTAL MAILS SOLD (from Config 2)</p>
+                        <p class="text-4xl font-bold text-blue-600">${totalPurchases}</p>
+                    </div>
+                `;
+            } catch (e) {
+                console.error("Error loading admin stats:", e);
+                container.innerHTML = `<p class="text-center text-red-500">Failed to load admin statistics.</p>`;
+            }
         }
 
         function showBulkPurchaseSuccess(mails, mailType, stockKey) {
