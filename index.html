@@ -869,7 +869,7 @@
         
         // --- DUAL FIREBASE CONFIG ---
 
-        // Config 1: For User Balance, Deposits, Profiles, Support, Notifications, Reviews, and App Settings
+        // Config 1: For User Balance, Deposits, Profiles, Support, Notifications, Reviews, App Settings and **MAIL PRICES/DETAILS**
         const firebaseConfig = {
           apiKey: "AIzaSyAsENiikJ5YQ1F8UHrixdJVEINAhO4PG30",
           authDomain: "bot2-3d8bc.firebaseapp.com",
@@ -879,7 +879,7 @@
           messagingSenderId: "77444577377",
           appId: "1:77444577377:web:05a9910049d166878d5220"
         };
-        // Config 2: For Mail Stock, Purchase History etc. (Conditionally Loaded)
+        // Config 2: For Mail **STOCK** and Purchase History etc.
         const firebaseConfigMail = {
           apiKey: "AIzaSyBtNIF0NbUsriMB7ZNrwfl_0hEyP6BpH6s",
           authDomain: "tmgbdsell.firebaseapp.com",
@@ -904,7 +904,7 @@
         let currentUserTg = null;
         let userData = null;
         let appConfig = {};
-        let mailTypesConfig = []; // To store mail types from dbMail if linked
+        let mailTypesConfig = []; // To store mail types from dbUser (Config 1)
         let insufficientBalanceInterval = null;
         let countdownInterval = null;
         
@@ -954,17 +954,17 @@
             // }
             
             loaderStatusText.textContent = 'Loading configuration...';
-            // Fetch central config first
+            // Fetch central config and mail prices from Config 1
             await fetchAppConfig();
+            await fetchMailTypesConfig(); // Fetches mail prices/details from dbUser (Config 1)
             
-            // Conditionally initialize the second Firebase app
+            // Conditionally initialize the second Firebase app for mail stock
             if (appConfig.isMailDbLinked) {
                 try {
                     mailApp = initializeApp(firebaseConfigMail, "mailApp");
                     dbMail = getFirestore(mailApp);
-                    await fetchMailTypesConfig(); // Fetch mail types from dbMail
                 } catch(e) {
-                    console.error("Failed to initialize Mail Database:", e);
+                    console.error("Failed to initialize Mail Database (for stock):", e);
                     appConfig.isMailDbLinked = false; // Fallback if initialization fails
                 }
             }
@@ -1074,7 +1074,7 @@
         }
 
         async function fetchAppConfig() {
-            const configRef = doc(dbUser, "config", "appSettings"); // Fetched from dbUser
+            const configRef = doc(dbUser, "config", "appSettings"); // Fetched from dbUser (Config 1)
             const configSnap = await getDoc(configRef);
             if (configSnap.exists()) {
                 appConfig = configSnap.data();
@@ -1093,14 +1093,15 @@
         }
         
         async function fetchMailTypesConfig() {
-            // This function fetches mail configuration from dbMail (Config 2)
-            if (!dbMail) return;
-            const configRef = doc(dbMail, "config", "main");
+            // MODIFIED: This function fetches mail configuration (price, details) from dbUser (Config 1)
+            if (!dbUser) return;
+            const configRef = doc(dbUser, "config", "mailSettings"); // Path in Config 1
             const configSnap = await getDoc(configRef);
             if (configSnap.exists()) {
                 mailTypesConfig = configSnap.data().mails || [];
             } else {
                 mailTypesConfig = [];
+                console.warn("Mail settings not found in dbUser (Config 1). Mail store will be empty.");
             }
         }
 
@@ -1465,6 +1466,7 @@ Please review and process this request.
         }
 
         async function getStockCount(collectionName) {
+            // This function correctly fetches stock count from dbMail (Config 2)
             try {
                 const q = query(collection(dbMail, collectionName), where("isSold", "==", false));
                 const snapshot = await getCountFromServer(q);
@@ -1478,9 +1480,11 @@ Please review and process this request.
                 return;
             }
 
+            // Fetch stock counts from dbMail (Config 2)
             const stockPromises = mails.map(mail => getStockCount(mail.stockKey));
             const stockCounts = await Promise.all(stockPromises);
             
+            // Prices and details come from `mails` argument, which is from dbUser (Config 1)
             let mailsWithStock = mails.map((mail, index) => ({ ...mail, stock: stockCounts[index] }))
                                      .sort((a, b) => (b.stock > 0 ? 1 : 0) - (a.stock > 0 ? 1 : 0) || a.priceBdt - b.priceBdt);
 
@@ -1573,6 +1577,7 @@ Please review and process this request.
             historyListEl.innerHTML = getLoadingHTML();
             
             try {
+                // Fetch latest user balance from Config 1
                 const userSnap = await getDoc(doc(dbUser, "users", userData.tgChatId));
                 userData = userSnap.data();
                 updateUI();
@@ -1583,9 +1588,11 @@ Please review and process this request.
                     if (teamLeaderSnap.exists()) effectiveBalance += teamLeaderSnap.data().balance;
                 }
                 
+                // mailTypesConfig already loaded from Config 1 with prices
                 const loginMails = mailTypesConfig.filter(m => m.category === 'login' || !m.category);
                 const otpMails = mailTypesConfig.filter(m => m.category === 'otp');
 
+                // Render lists. Stock count will be fetched from Config 2 within this function.
                 await Promise.all([
                     renderMailList(loginMails, loginMailContainer, effectiveBalance),
                     renderMailList(otpMails, otpMailContainer, effectiveBalance)
@@ -1593,6 +1600,7 @@ Please review and process this request.
                 
                 switchMailView('login');
                 
+                // Fetch purchase history from Config 2
                 const twentyFourHoursAgo = Timestamp.fromDate(new Date(Date.now() - 24 * 60 * 60 * 1000));
                 const q = query(collection(dbMail, "mail_purchases"), where("userId", "==", userData.tgChatId), where("purchasedAt", ">=", twentyFourHoursAgo), orderBy("purchasedAt", "desc"));
                 const querySnapshot = await getDocs(q);
@@ -1824,7 +1832,7 @@ Please review and process this request.
             const updatesContainer = document.getElementById('updates-content');
             updatesContainer.innerHTML = getLoadingHTML();
             try {
-                // Updates are fetched from dbUser
+                // Updates are fetched from dbUser (Config 1)
                 const q = query(collection(dbUser, "updates"), orderBy("createdAt", "desc"), limit(1));
                 const snapshot = await getDocs(q);
                 if (snapshot.empty) {
@@ -2210,16 +2218,19 @@ Please review and process this request.
             if (quantity > availableStock) {
                 return showAlert(`দুঃখিত, স্টকে মাত্র ${availableStock} টি মেইল আছে।`);
             }
-
+            
+            // The price `originalPrice` comes from mailTypesConfig (Config 1)
             const totalCost = quantity * originalPrice;
             
             if (!confirm(`আপনি কি ${quantity} টি ${mailType} মেইল মোট ৳${totalCost.toFixed(2)} দিয়ে কিনতে চান?`)) return;
 
+            // Ensure loader is visible throughout the transaction
             document.getElementById('app-container').append(loader);
             loader.style.display = 'flex';
             
             let purchasedMailsData = [];
             
+            // Balance is managed in dbUser (Config 1)
             const buyerRef = doc(dbUser, "users", userData.tgChatId);
             const userSnap = await getDoc(buyerRef);
             let currentBuyerData = userSnap.data();
@@ -2241,6 +2252,7 @@ Please review and process this request.
             }
 
             try {
+                // Fetch mails from stock in dbMail (Config 2)
                 const mailQuery = query(collection(dbMail, stockKey), where("isSold", "==", false), limit(quantity));
                 const mailQuerySnapshot = await getDocs(mailQuery);
 
@@ -2248,6 +2260,7 @@ Please review and process this request.
                     throw new Error(`Not enough stock. Only ${mailQuerySnapshot.docs.length} mails available.`);
                 }
                 
+                // Transaction to deduct balance from dbUser (Config 1)
                 await runTransaction(dbUser, async (transaction) => {
                     const freshBuyerSnap = await transaction.get(buyerRef);
                     let costRemaining = totalCost;
@@ -2265,6 +2278,7 @@ Please review and process this request.
                     }
                 });
 
+                // Batch write to update stock in dbMail (Config 2) and log purchase
                 const mailBatch = writeBatch(dbMail);
                 mailQuerySnapshot.docs.forEach(mailDoc => {
                     const mailData = mailDoc.data();
@@ -2289,8 +2303,9 @@ Please review and process this request.
             } catch (e) {
                 showAlert(`Bulk purchase failed: ${e.message}. If balance was deducted, contact support immediately.`);
                 console.error("Bulk Buy Error:", e);
-                loadMailStore();
+                loadMailStore(); // Reload to show correct balance/stock
             } finally {
+                // Hide loader only after all operations are complete or failed
                 loader.style.display = 'none';
             }
         };
@@ -2306,6 +2321,7 @@ Please review and process this request.
             }
 
             try {
+                // Stats from dbMail (Config 2)
                 const purchasesRef = collection(dbMail, 'mail_purchases');
                 const snapshot = await getCountFromServer(purchasesRef);
                 const totalPurchases = snapshot.data().count;
